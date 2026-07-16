@@ -1,0 +1,35 @@
+# Render Blueprint — deploy this project with "New +" -> "Blueprint" in the
+# Render dashboard, pointed at this repo. Creates one always-on web service.
+#
+# DATABASE_URL, RESEND_API_KEY, and NOTIFY_TO_EMAIL are marked sync: false,
+# meaning Render will prompt you to enter them in the dashboard rather than
+# storing them in this file — keep real secrets out of version control.
+#
+# To onboard a second firm: copy this repo, change `name` below (and the
+# FIRM_* vars if you want the dashboard/service name to reflect the new
+# firm), and deploy it as its own separate Render service with its own
+# Supabase project. Never point two firms at the same DATABASE_URL.
+
+services:
+  - type: web
+    name: rwhm-intake-system
+    env: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: PGSSL
+        value: "true"
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+      - key: RESEND_API_KEY
+        sync: false
+      - key: NOTIFY_FROM_EMAIL
+        sync: false
+      - key: NOTIFY_TO_EMAIL
+        sync: false

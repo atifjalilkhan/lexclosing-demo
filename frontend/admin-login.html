@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Staff Login — RWHM Intake System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .login-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .login-card {
+    width: 100%;
+    max-width: 380px;
+  }
+  .login-card h1 {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .login-card .sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 18px;
+  }
+  label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--pine);
+    margin: 12px 0 4px;
+  }
+  input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--cream-dark);
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+  button[type="submit"] {
+    width: 100%;
+    margin-top: 18px;
+    background: var(--pine);
+    color: var(--cream);
+    border: none;
+    border-radius: 6px;
+    padding: 11px;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  button[type="submit"]:disabled {
+    opacity: 0.6;
+  }
+  #errorMsg {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-top: 10px;
+    text-align: center;
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <div class="brand-bar">
+    <div class="firm-name">
+      <span data-firm-name>Rusk, Wadlin, Heppner &amp; Martuscello, LLP</span>
+      <small data-firm-tagline>Staff Dashboard</small>
+    </div>
+  </div>
+
+  <div class="login-wrap">
+    <div class="login-card card">
+      <h1>Staff Login</h1>
+      <div class="sub">Access is restricted to firm staff only.</div>
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input type="email" id="email" required autocomplete="username" />
+        <label for="password">Password</label>
+        <input type="password" id="password" required autocomplete="current-password" />
+        <button type="submit" id="loginBtn">Log In</button>
+        <div id="errorMsg"></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="brand.js"></script>
+  <script>
+    const form = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const loginBtn = document.getElementById('loginBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in…';
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          errorMsg.textContent = data.error || 'Login failed.';
+          errorMsg.style.display = 'block';
+          return;
+        }
+        window.location.href = 'admin.html';
+      } catch (err) {
+        errorMsg.textContent = 'Connection error. Please try again.';
+        errorMsg.style.display = 'block';
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Log In';
+      }
+    });
+  </script>
+</body>
+</html>

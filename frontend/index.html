@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rusk, Wadlin, Heppner &amp; Martuscello, LLP — Client Intake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body { display: flex; flex-direction: column; min-height: 100vh; }
+  .chat-wrap {
+    max-width: 640px;
+    width: 100%;
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px 90px;
+  }
+  .intro {
+    text-align: center;
+    margin: 18px 0 8px;
+  }
+  .intro p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 480px;
+    margin: 6px auto 0;
+  }
+  #messages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .msg {
+    max-width: 82%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
+  }
+  .msg.bot {
+    align-self: flex-start;
+    background: #fff;
+    border: 1px solid var(--cream-dark);
+    border-bottom-left-radius: 4px;
+  }
+  .msg.user {
+    align-self: flex-end;
+    background: var(--pine);
+    color: var(--cream);
+    border-bottom-right-radius: 4px;
+  }
+  .quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-self: flex-start;
+    max-width: 90%;
+  }
+  .quick-replies button {
+    background: #fff;
+    border: 1px solid var(--brass);
+    color: var(--pine);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .quick-replies button:hover {
+    background: var(--brass-light);
+    color: #fff;
+  }
+  .result-card {
+    align-self: stretch;
+    max-width: 100%;
+  }
+  .result-card .case-number-badge {
+    margin-bottom: 6px;
+  }
+  .composer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--cream);
+    border-top: 1px solid var(--cream-dark);
+    padding: 12px 16px;
+  }
+  .composer form {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    gap: 8px;
+  }
+  .composer input[type="text"] {
+    flex: 1;
+    padding: 11px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--cream-dark);
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+  .composer input[type="text"]:focus {
+    outline: 2px solid var(--brass);
+    outline-offset: 1px;
+  }
+  .composer button[type="submit"] {
+    background: var(--pine);
+    color: var(--cream);
+    border: none;
+    border-radius: 999px;
+    padding: 0 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .composer button[type="submit"]:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .disclaimer {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--muted);
+    max-width: 640px;
+    margin: 4px auto 0;
+  }
+  .typing {
+    align-self: flex-start;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+  <div class="brand-bar">
+    <div class="firm-name">
+      <span data-firm-name>Rusk, Wadlin, Heppner &amp; Martuscello, LLP</span>
+      <small data-firm-tagline>Client Intake &amp; Case Status</small>
+    </div>
+  </div>
+
+  <div class="chat-wrap">
+    <div class="intro">
+      <h1 style="font-size:1.3rem;">How can we help?</h1>
+      <p>Start a new case or check the status of an existing one. This chat is not a substitute for speaking with an attorney about time-sensitive legal matters.</p>
+    </div>
+
+    <div id="messages"></div>
+  </div>
+
+  <div class="composer">
+    <form id="composerForm">
+      <input type="text" id="composerInput" placeholder="Type your reply…" autocomplete="off" />
+      <button type="submit" id="composerSend">Send</button>
+    </form>
+    <p class="disclaimer">By submitting, you agree this does not create an attorney-client relationship until confirmed by our office.</p>
+  </div>
+
+  <script src="brand.js"></script>
+  <script src="chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "rwhm-intake-system",
+  "version": "1.0.0",
+  "description": "RWHM Client Intake & Case Status System - AI-guided intake chat + case status lookup for Rusk, Wadlin, Heppner & Martuscello, LLP",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "db:migrate": "psql \"$DATABASE_URL\" -f backend/schema.sql",
+    "db:seed": "node backend/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "pg": "^8.11.5",
+    "express-session": "^1.18.0",
+    "connect-pg-simple": "^9.0.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
