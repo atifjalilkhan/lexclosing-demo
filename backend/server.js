@@ -10,8 +10,8 @@ const app = require('./app');
 
 // Default kept off the 3000-3022 range in case this runs alongside other
 // local projects that already use those ports — override with PORT in .env.
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4002;
 
 app.listen(PORT, () => {
-  console.log(`RWHM intake system listening on port ${PORT}`);
+  console.log(`LexCase listening on port ${PORT}`);
 });

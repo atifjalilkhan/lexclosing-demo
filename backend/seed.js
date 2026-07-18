@@ -16,9 +16,9 @@ require('dotenv').config();
 const db = require('./db');
 const auth = require('./auth');
 
-const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@rwhm.com';
-const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'ChangeMe123!';
-const ADMIN_NAME = process.env.SEED_ADMIN_NAME || 'RWHM Admin';
+const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@lexcase.com';
+const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'Demo@123';
+const ADMIN_NAME = process.env.SEED_ADMIN_NAME || 'LexCase Administrator';
 
 async function seedStaffUser() {
   const passwordHash = await auth.hashPassword(ADMIN_PASSWORD);

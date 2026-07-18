@@ -49,7 +49,7 @@ const pool = new Pool({
 });
 
 // Overridable per firm — see firm-config.js. Defaults to RWHM for this build.
-const CASE_NUMBER_PREFIX = process.env.CASE_NUMBER_PREFIX || 'RWHM';
+const CASE_NUMBER_PREFIX = process.env.CASE_NUMBER_PREFIX || 'LEX';
 
 function formatCaseNumber(year, sequence) {
   return `${CASE_NUMBER_PREFIX}-${year}-${String(sequence).padStart(4, '0')}`;

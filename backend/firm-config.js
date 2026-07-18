@@ -13,8 +13,8 @@
  */
 
 module.exports = {
-  firmName: process.env.FIRM_NAME || 'Rusk, Wadlin, Heppner & Martuscello, LLP',
-  firmShortName: process.env.FIRM_SHORT_NAME || 'RWHM',
+  firmName: process.env.FIRM_NAME || 'LexCase',
+  firmShortName: process.env.FIRM_SHORT_NAME || 'LEX',
   tagline: process.env.FIRM_TAGLINE || 'Client Intake & Case Status',
   colors: {
     primary: process.env.BRAND_PRIMARY_COLOR || '#1b3a2e',
