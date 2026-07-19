@@ -99,8 +99,8 @@ app.get('/api/admin/cases', auth.requireAuth, async (req, res) => {
         id: c.id,
         caseNumber: c.caseNumber,
         stage: c.stage,
-        transactionType: c.accidentType,
-        propertyAddress: c.accidentDate,
+        transactionType: c.transactionType,
+        propertyAddress: c.propertyAddress,
         description: c.description,
         createdAt: c.createdAt,
         updatedAt: c.updatedAt,
@@ -273,7 +273,7 @@ async function handleStep(sessionId, state, text) {
         results: matches.map(({ case: c, client }) => ({
           caseNumber: c.caseNumber,
           clientName: `${client.firstName} ${client.lastName}`,
-          transactionType: c.accidentType,
+          transactionType: c.transactionType,
           tracker: stageTracker(c.stage),
         })),
       };
