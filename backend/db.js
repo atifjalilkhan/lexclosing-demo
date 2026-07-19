@@ -13,12 +13,13 @@
 const { Pool } = require('pg');
 
 const STAGES = [
-  'Intake Received',
-  'Under Attorney Review',
-  'Client in Treatment',
-  'Demand Sent to Insurer',
-  'Negotiation/Litigation',
-  'Settled/Resolved',
+  'Contract Received',
+  'Attorney Review',
+  'Title Review',  
+  'Mortgage Processing',
+  'Clear To Close',
+  'Closing Scheduled',
+  'Closed',
 ];
 
 if (!process.env.DATABASE_URL) {
@@ -49,7 +50,7 @@ const pool = new Pool({
 });
 
 // Overridable per firm — see firm-config.js. Defaults to RWHM for this build.
-const CASE_NUMBER_PREFIX = process.env.CASE_NUMBER_PREFIX || 'LEX';
+const CASE_NUMBER_PREFIX = process.env.CASE_NUMBER_PREFIX || 'LC';
 
 function formatCaseNumber(year, sequence) {
   return `${CASE_NUMBER_PREFIX}-${year}-${String(sequence).padStart(4, '0')}`;
@@ -115,7 +116,7 @@ async function countCasesForYear(year) {
 
 /**
  * Create a new case for an existing client. Auto-generates the case number
- * and sets the initial stage to "Intake Received". Uses a Postgres advisory
+ * and sets the initial stage to "Contract Received". Uses a Postgres advisory
  * lock so two simultaneous intakes can never be handed the same case
  * number.
  */

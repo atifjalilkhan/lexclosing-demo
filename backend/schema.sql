@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS cases (
   accident_type  TEXT NOT NULL,
   accident_date  TEXT NOT NULL,
   description    TEXT NOT NULL DEFAULT '',
-  stage          TEXT NOT NULL DEFAULT 'Intake Received',
+  stage          TEXT NOT NULL DEFAULT 'Contract Received',
   created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at     TIMESTAMPTZ NOT NULL DEFAULT now()
 );

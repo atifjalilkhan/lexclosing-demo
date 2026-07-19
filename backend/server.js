@@ -13,5 +13,5 @@ const app = require('./app');
 const PORT = process.env.PORT || 4002;
 
 app.listen(PORT, () => {
-  console.log(`LexCase listening on port ${PORT}`);
+  console.log(`LexClosing listening on port ${PORT}`);
 });

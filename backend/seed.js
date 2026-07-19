@@ -18,7 +18,7 @@ const auth = require('./auth');
 
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@lexcase.com';
 const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'Demo@123';
-const ADMIN_NAME = process.env.SEED_ADMIN_NAME || 'LexCase Administrator';
+const ADMIN_NAME = process.env.SEED_ADMIN_NAME || 'LexClosing Administrator';
 
 async function seedStaffUser() {
   const passwordHash = await auth.hashPassword(ADMIN_PASSWORD);
@@ -46,10 +46,10 @@ async function seedDemoCases() {
         phone: '845-555-0142',
         email: 'maria.santos@example.com',
       },
-      accidentType: 'Car Accident',
-      accidentDate: '2026-05-03',
-      description: 'Rear-ended on Route 9W near Kingston; whiplash and ER visit.',
-      stage: 'Negotiation/Litigation',
+      accidentType: 'Residential Purchase',
+      accidentDate: '123 Main Street, Kingston, NY',
+      description: 'Buyer representation for residential home purchase. Mortgage commitment pending.',
+      stage: 'Mortgage Processing',
     },
     {
       client: {
@@ -58,10 +58,10 @@ async function seedDemoCases() {
         phone: '845-555-0198',
         email: 'david.chen@example.com',
       },
-      accidentType: 'Construction Accident',
-      accidentDate: '2026-04-18',
-      description: 'Fall from scaffolding at a Marlboro job site; fractured wrist.',
-      stage: 'Client in Treatment',
+      accidentType: 'Residential Sale',
+      accidentDate: '45 Oak Avenue, Poughkeepsie, NY',
+      description: 'Seller representation. Title review in progress.',
+      stage: 'Title Review',
     },
     {
       client: {
@@ -70,10 +70,10 @@ async function seedDemoCases() {
         phone: '845-555-0176',
         email: 'sandra.wilkes@example.com',
       },
-      accidentType: 'Slip and Fall',
-      accidentDate: '2026-06-21',
-      description: 'Slipped on unsalted ice outside a Kingston grocery store.',
-      stage: 'Intake Received',
+      accidentType: 'Commercial Purchase',
+      accidentDate: '800 Corporate Drive, Albany, NY',
+      description: 'Commercial property acquisition. Contract received and under attorney review.',
+      stage: 'Attorney Review',
     },
   ];
 

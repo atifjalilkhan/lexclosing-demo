@@ -81,7 +81,7 @@
       card.innerHTML = `
         <div class="case-number-badge mono">${escapeHtml(r.caseNumber)}</div>
         <div style="margin-top:6px; font-weight:600;">${escapeHtml(r.clientName)}</div>
-        <div style="color: var(--muted); font-size: 0.85rem;">${escapeHtml(r.accidentType)}</div>
+        <div style="color: var(--muted); font-size: 0.85rem;">${escapeHtml(r.transactionType)}</div>
       `;
       renderTracker(card, r.tracker);
       wrap.appendChild(card);
@@ -113,8 +113,8 @@
       <div><strong>Name:</strong> ${escapeHtml(summary.firstName)} ${escapeHtml(summary.lastName)}</div>
       <div><strong>Phone:</strong> ${escapeHtml(summary.phone)}</div>
       <div><strong>Email:</strong> ${escapeHtml(summary.email)}</div>
-      <div><strong>Accident type:</strong> ${escapeHtml(summary.accidentType)}</div>
-      <div><strong>Accident date:</strong> ${escapeHtml(summary.accidentDate)}</div>
+      <div><strong>Transaction type:</strong> ${escapeHtml(summary.accidentType)}</div>
+      <div><strong>Property address:</strong> ${escapeHtml(summary.accidentDate)}</div>
       <div><strong>Description:</strong> ${escapeHtml(summary.description)}</div>
     `;
     wrap.appendChild(card);

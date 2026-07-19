@@ -99,8 +99,8 @@ app.get('/api/admin/cases', auth.requireAuth, async (req, res) => {
         id: c.id,
         caseNumber: c.caseNumber,
         stage: c.stage,
-        accidentType: c.accidentType,
-        accidentDate: c.accidentDate,
+        transactionType: c.accidentType,
+        propertyAddress: c.accidentDate,
         description: c.description,
         createdAt: c.createdAt,
         updatedAt: c.updatedAt,
@@ -149,11 +149,13 @@ function freshState() {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ACCIDENT_TYPES = [
-  'Car Accident',
-  'Truck Accident',
-  'Construction Accident',
-  'Slip and Fall',
-  'Medical Malpractice',
+  'Buyer Representation',
+  'Seller Representation',
+  'Residential Purchase',
+  'Residential Sale',
+  'Commercial Purchase',
+  'Commercial Sale',
+  'Refinance',
   'Other',
 ];
 
@@ -271,7 +273,7 @@ async function handleStep(sessionId, state, text) {
         results: matches.map(({ case: c, client }) => ({
           caseNumber: c.caseNumber,
           clientName: `${client.firstName} ${client.lastName}`,
-          accidentType: c.accidentType,
+          transactionType: c.accidentType,
           tracker: stageTracker(c.stage),
         })),
       };
@@ -310,33 +312,32 @@ async function handleStep(sessionId, state, text) {
         return { reply: 'That email address doesn\'t look valid — please try again.' };
       }
       state.data.email = text;
-      state.step = 'accidentType';
+      state.step = 'transactionType';
       return {
-        reply: 'What type of accident or injury is this regarding?',
+        reply: 'What type of real estate transaction is this regarding?',
         quickReplies: ACCIDENT_TYPES,
       };
     }
 
-    case 'accidentType': {
-      if (!text) return { reply: 'Please choose or describe the accident type.' };
-      state.data.accidentType = text;
-      state.step = 'accidentDate';
-      return { reply: 'When did the accident happen? (e.g. 2026-06-01 or "last Tuesday")' };
+    case 'transactionType': {
+      if (!text) return { reply: 'Please choose the type of real estate transaction.' };
+      state.data.transactionType = text;
+      state.step = 'propertyAddress';
+      return { reply: 'What is the property address?' };
     }
 
-    case 'accidentDate': {
-      if (!text) return { reply: 'Please enter the approximate date of the accident.' };
-      state.data.accidentDate = text;
+    case 'propertyAddress': {
+      if (!text) return { reply: 'Please enter the property address.' };
+      state.data.propertyAddress = text;
       state.step = 'description';
       return {
         reply:
-          'In a sentence or two, what happened? Include anything you think ' +
-          'is important — injuries, location, witnesses, etc.',
+          'Please provide additional details about the transaction, including buyer/seller information, purchase price, closing timeline, or any special circumstances.',
       };
     }
 
     case 'description': {
-      if (!text) return { reply: 'A brief description helps us route your case correctly — please add a sentence.' };
+      if (!text) return { reply: 'A brief description helps us understand the transaction — please add a sentence.' };
       state.data.description = text;
       state.step = 'confirm';
       return {
@@ -367,8 +368,8 @@ async function handleStep(sessionId, state, text) {
       });
       const newCase = await db.addCase({
         clientId: client.id,
-        accidentType: state.data.accidentType,
-        accidentDate: state.data.accidentDate,
+        transactionType: state.data.transactionType,
+        propertyAddress: state.data.propertyAddress,
         description: state.data.description,
       });
 
@@ -381,8 +382,8 @@ async function handleStep(sessionId, state, text) {
       notifyNewIntake({
         caseNumber: newCase.caseNumber,
         client,
-        accidentType: newCase.accidentType,
-        accidentDate: newCase.accidentDate,
+        transactionType: newCase.transactionType,
+        propertyAddress: newCase.propertyAddress,
       }).catch((err) => console.error('notifyNewIntake failed:', err));
 
       state.step = 'done';
