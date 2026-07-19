@@ -329,13 +329,22 @@ async function handleStep(sessionId, state, text) {
     case 'propertyAddress': {
       if (!text) return { reply: 'Please enter the property address.' };
       state.data.propertyAddress = text;
-      state.step = 'description';
+      state.step = 'purchasePrice';
       return {
         reply:
-          'Please provide additional details about the transaction, including buyer/seller information, purchase price, closing timeline, or any special circumstances.',
+          'What is the purchase price?',
       };
     }
 
+    case 'purchasePrice': {
+      if (!text) return { reply: 'Please enter the purchase price.' };
+      state.data.purchasePrice = text;
+      state.step = 'description';
+      return {
+        reply:
+          'Please provide the buyer and seller names (if known), desired closing date, lender information, and any additional transaction details.',
+      };
+    }
     case 'description': {
       if (!text) return { reply: 'A brief description helps us understand the transaction — please add a sentence.' };
       state.data.description = text;
