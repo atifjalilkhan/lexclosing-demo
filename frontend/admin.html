@@ -137,7 +137,7 @@
             <div style="color:var(--muted); font-size:0.8rem;">${escapeHtml(c.client.phone)} · ${escapeHtml(c.client.email)}</div>
           </td>
           <td>${escapeHtml(c.transactionType)}<br/><span style="color:var(--muted); font-size:0.8rem;">${escapeHtml(c.propertyAddress)}</span></td>
-          <td style="max-width:220px;">${escapeHtml(c.description)}</td>
+          <td style="max-width:320px;">${escapeHtml(c.description)}</td>
           <td>
             <select class="stage-select">
               ${stagesCache.map((s) => `<option value="${escapeHtml(s)}" ${s === c.stage ? 'selected' : ''}>${escapeHtml(s)}</option>`).join('')}
