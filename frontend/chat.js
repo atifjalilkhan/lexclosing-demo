@@ -113,10 +113,13 @@
       <div><strong>Name:</strong> ${escapeHtml(summary.firstName)} ${escapeHtml(summary.lastName)}</div>
       <div><strong>Phone:</strong> ${escapeHtml(summary.phone)}</div>
       <div><strong>Email:</strong> ${escapeHtml(summary.email)}</div>
-      <div><strong>Transaction type:</strong> ${escapeHtml(summary.accidentType)}</div>
-      <div><strong>Property address:</strong> ${escapeHtml(summary.accidentDate)}</div>
+      <div><strong>Transaction type:</strong> ${escapeHtml(summary.transactionType)}</div>
+      <div><strong>Property address:</strong> ${escapeHtml(summary.propertyAddress)}</div>
       <div><strong>Purchase price:</strong> ${escapeHtml(summary.purchasePrice)}</div>
-
+      <div><strong>Closing date:</strong> ${escapeHtml(summary.closingDate)}</div>
+      <div><strong>Buyer name:</strong> ${escapeHtml(summary.buyerName)}</div>
+      <div><strong>Seller name:</strong> ${escapeHtml(summary.sellerName)}</div>
+      <div><strong>Lender name:</strong> ${escapeHtml(summary.lenderName)}</div>
       <div><strong>Description:</strong> ${escapeHtml(summary.description)}</div>
     `;
     wrap.appendChild(card);
