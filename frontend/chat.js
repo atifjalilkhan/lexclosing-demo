@@ -115,6 +115,8 @@
       <div><strong>Email:</strong> ${escapeHtml(summary.email)}</div>
       <div><strong>Transaction type:</strong> ${escapeHtml(summary.accidentType)}</div>
       <div><strong>Property address:</strong> ${escapeHtml(summary.accidentDate)}</div>
+      <div><strong>Purchase price:</strong> ${escapeHtml(summary.purchasePrice)}</div>
+
       <div><strong>Description:</strong> ${escapeHtml(summary.description)}</div>
     `;
     wrap.appendChild(card);
