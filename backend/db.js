@@ -13,13 +13,15 @@
 const { Pool } = require('pg');
 
 const STAGES = [
-  'Contract Received',
-  'Attorney Review',
-  'Title Review',  
-  'Mortgage Processing',
-  'Clear To Close',
-  'Closing Scheduled',
-  'Closed',
+   'Contract Received',
+   'Attorney Review',
+   'Title Ordered',
+   'Title Review',
+   'Mortgage Processing',
+   'Mortgage Commitment Issued',
+   'Clear To Close',
+   'Closing Scheduled',
+   'Closed',  
 ];
 
 if (!process.env.DATABASE_URL) {
