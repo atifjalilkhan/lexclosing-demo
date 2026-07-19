@@ -348,12 +348,39 @@ async function handleStep(sessionId, state, text) {
     case 'closingDate': {
       if (!text) return { reply: 'Please enter the expected closing date.' };
       state.data.closingDate = text;
-      state.step = 'description';
+      state.step = 'buyerName';
       return {
         reply:
-          'Please provide the buyer and seller names (if known), lender information, and any additional transaction details.',
+          'Please enter the buyer name.',
       };
     }
+    case 'buyerName': {
+      if (!text) return { reply: 'Please enter the buyer name.' };
+      state.data.buyerName = text;
+      state.step = 'sellerName';
+      return {
+        reply:
+          'Please enter the seller name.',
+      };
+    }
+    case 'sellerName': {
+       if (!text) return { reply: 'Please enter the seller name.' };
+       state.data.sellerName = text;
+       state.step = 'lenderName';
+       return {
+         reply:
+           'Please enter the lender name',
+       };
+     }
+     case 'lenderName': {
+       if (!text) return { reply: 'Please enter the lender name.' };
+       state.data.lenderName = text;
+       state.step = 'description';
+       return {
+         reply:
+           'Please provide any additional transaction details or special circumstances.',
+        };
+      }
     case 'description': {
       if (!text) return { reply: 'A brief description helps us understand the transaction — please add a sentence.' };
       state.data.description = text;
