@@ -415,6 +415,11 @@ async function handleStep(sessionId, state, text) {
         clientId: client.id,
         transactionType: state.data.transactionType,
         propertyAddress: state.data.propertyAddress,
+        purchasePrice: state.data.purchasePrice,
+        closingDate: state.data.closingDate,
+        buyerName: state.data.buyerName,
+        sellerName: state.data.sellerName,
+        lenderName: state.data.lenderName,
         description: state.data.description,
       });
 

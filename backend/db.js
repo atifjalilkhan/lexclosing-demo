@@ -122,7 +122,17 @@ async function countCasesForYear(year) {
  * lock so two simultaneous intakes can never be handed the same case
  * number.
  */
-async function addCase({ clientId, accidentType, accidentDate, description }) {
+async function addCase({
+  clientId, 
+  transactionType, 
+  propertyAddress, 
+  purchasePrice,
+  closingDate,
+  buyerName,
+  sellerName,
+  lenderName,
+  description 
+}) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -146,8 +156,8 @@ async function addCase({ clientId, accidentType, accidentDate, description }) {
       [
         caseNumber,
         clientId,
-        (accidentType || '').trim(),
-        (accidentDate || '').trim(),
+        (transactionType || '').trim(),
+        (propertyAddress || '').trim(),
         (description || '').trim(),
         STAGES[0],
       ]
