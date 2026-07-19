@@ -339,10 +339,19 @@ async function handleStep(sessionId, state, text) {
     case 'purchasePrice': {
       if (!text) return { reply: 'Please enter the purchase price.' };
       state.data.purchasePrice = text;
+      state.step = 'closingDate';
+      return {
+        reply:
+          'What is the expected closing date?',
+      };
+    }
+    case 'closingDate': {
+      if (!text) return { reply: 'Please enter the expected closing date.' };
+      state.data.closingDate = text;
       state.step = 'description';
       return {
         reply:
-          'Please provide the buyer and seller names (if known), desired closing date, lender information, and any additional transaction details.',
+          'Please provide the buyer and seller names (if known), lender information, and any additional transaction details.',
       };
     }
     case 'description': {
