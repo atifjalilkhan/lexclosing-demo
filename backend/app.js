@@ -170,12 +170,12 @@ app.post('/api/chat/start', async (req, res) => {
     await db.saveChatSession(sessionId, freshState());
     res.json({
       sessionId,
-      reply:
+      reply: 
         `Welcome to ${firmConfig.firmName}. I can help you start a new ` +
-        "case or check the status of an existing one. Which would you " +
-        "like to do?",
-      quickReplies: ['Start a new case', 'Check my case status'],
-    });
+        `real estate transaction or check the status of an existing ` +
+        `transaction. Which would you like to do?`,
+        quickReplies: ['Start a New Transaction', 'Check Transaction Status'],
+ });
   } catch (err) {
     console.error('Failed to start chat session:', err);
     res.status(500).json({
