@@ -97,23 +97,23 @@
   ">
   <div class="card">
     <h3>Open Transactions</h3>
-    <div style="font-size:2rem;font-weight:bold;">47</div>
+    <div id="openTx" style="font-size:2rem;font-weight:bold;">0</div>
   </div>
 
   <div class="card">
     <h3>Closing This Week</h3>
-    <div style="font-size:2rem;font-weight:bold;">12</div>
+    <div id="closingWeek" style="font-size:2rem;font-weight:bold;">0</div>
   </div>
 
   <div class="card">
     <h3>Clear To Close</h3>
-    <div style="font-size:2rem;font-weight:bold;">8</div>
+    <div id="clearToClose" style="font-size:2rem;font-weight:bold;">0</div>
   </div>
 
     <div class="card">
     <h3>Delayed</h3>
-    <div style="font-size:2rem;font-weight:bold;color:#c62828;">3</div>
-    </div>
+    <div id="delayedTx" style="font-size:2rem;font-weight:bold;color:#c62828;">0</div>    
+  </div>
   </div>
 
     <div id="content" class="loading">Loading cases…</div>
@@ -145,7 +145,22 @@
     async function loadCases() {
       const res = await fetch('/api/transactions');
       const data = await res.json();
-      renderTable(data);
+
+document.getElementById('openTx').textContent = data.length;
+
+document.getElementById('clearToClose').textContent =
+  data.filter(t => t.transaction_status === 'CLEAR_TO_CLOSE').length;
+
+document.getElementById('closingWeek').textContent =
+  data.filter(t => t.transaction_status === 'CLOSING_SCHEDULED').length;
+
+document.getElementById('delayedTx').textContent =
+  data.filter(t =>
+    t.current_blocker &&
+    t.current_blocker.trim() !== ''
+  ).length;
+
+renderTable(data);
     }
 
     function renderTable(transactions) {
