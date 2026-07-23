@@ -534,7 +534,15 @@ app.get('/api/transactions/:id', async (req, res) => {
       current_blocker: 'Mortgage Commitment Outstanding',
       responsible_party: 'LENDER',
       next_action: 'Upload Mortgage Commitment Letter'
-    }
+    },
+    participants: [
+      { role: 'Buyer', name: 'Tina Monium' },
+      { role: 'Seller', name: 'Lisa Brook' },
+      { role: 'Agent', name: 'John Realtor' },
+      { role: 'Broker', name: 'ABC Realty' },
+      { role: 'Attorney', name: 'Jane Attorney' },
+      { role: 'Lender', name: 'Ulster Savings Bank' }
+    ]
   });
 });
 app.get('/api/health', (req, res) => {

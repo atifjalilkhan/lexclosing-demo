@@ -226,6 +226,14 @@
       <p><strong>Buyer:</strong> ${tx.buyer_name}</p>
 
       <p><strong>Seller:</strong> ${tx.seller_name}</p>
+<h3>Participants</h3>
+
+<ul>
+  ${data.participants.map(p => `
+    <li><strong>${p.role}:</strong> ${p.name}</li>
+  `).join('')}
+</ul>
+
 
       <p><strong>Status:</strong> ${tx.transaction_status}</p>
 
