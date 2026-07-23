@@ -461,17 +461,67 @@ async function handleStep(sessionId, state, text) {
 
 app.get('/api/transactions', async (req, res) => {
   res.json([
-    {
-      transaction_uuid: '9f65151f-ed4b-4615-8733-decb6c40c107',
-      property_address: '500 Broadway, Kingston, NY 12401',
-      buyer_name: 'Tina Monium',
-      seller_name: 'Lisa Brook',
-      transaction_status: 'MORTGAGE_PROCESSING',
-      current_blocker: 'Mortgage Commitment Outstanding',
-      responsible_party: 'LENDER',
-      next_action: 'Upload Mortgage Commitment Letter'
-    }
-  ]);
+  {
+    transaction_uuid: '1',
+    property_address: '500 Broadway, Kingston, NY 12401',
+    buyer_name: 'Tina Monium',
+    seller_name: 'Lisa Brook',
+    transaction_status: 'MORTGAGE_PROCESSING',
+    current_blocker: 'Mortgage Commitment Outstanding',
+    responsible_party: 'LENDER',
+    next_action: 'Upload Mortgage Commitment Letter'
+  },
+  {
+    transaction_uuid: '2',
+    property_address: '85 Main Street, Saugerties, NY 12477',
+    buyer_name: 'John Smith',
+    seller_name: 'Sarah Jones',
+    transaction_status: 'TITLE_REVIEW',
+    current_blocker: 'Title Exception Review',
+    responsible_party: 'ATTORNEY',
+    next_action: 'Review Title Report'
+  },
+  {
+    transaction_uuid: '3',
+    property_address: '23 River Road, Catskill, NY 12414',
+    buyer_name: 'Michael Brown',
+    seller_name: 'David Green',
+    transaction_status: 'CLEAR_TO_CLOSE',
+    current_blocker: '',
+    responsible_party: '',
+    next_action: 'Schedule Closing'
+  },
+  {
+    transaction_uuid: '4',
+    property_address: '15 Market Street, Kingston, NY 12401',
+    buyer_name: 'Emily White',
+    seller_name: 'Robert Black',
+    transaction_status: 'CONTRACT_REVIEW',
+    current_blocker: 'Contract Amendment Pending',
+    responsible_party: 'BUYER',
+    next_action: 'Sign Amendment'
+  },
+  {
+    transaction_uuid: '5',
+    property_address: '72 Lake View Drive, Woodstock, NY 12498',
+    buyer_name: 'Jessica Hall',
+    seller_name: 'Andrew Clark',
+    transaction_status: 'TITLE_ORDERED',
+    current_blocker: 'Waiting For Title Search',
+    responsible_party: 'TITLE',
+    next_action: 'Upload Title Commitment'
+  },
+  {
+    transaction_uuid: '6',
+    property_address: '9 Elm Court, New Paltz, NY 12561',
+    buyer_name: 'Kevin Adams',
+    seller_name: 'Laura Adams',
+    transaction_status: 'CLOSING_SCHEDULED',
+    current_blocker: '',
+    responsible_party: '',
+    next_action: 'Attend Closing'
+  }
+]);
 });
 app.get('/api/transactions/:id', async (req, res) => {
   res.json({
