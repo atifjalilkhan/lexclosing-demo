@@ -266,11 +266,40 @@ renderTable(data);
 
 <h3>Transaction Analytics</h3>
 
-<p><strong>Days To Close:</strong> ${data.analytics.days_to_close}</p>
+<div style="
+  padding:15px;
+  border-radius:8px;
+  background:#f8f8f8;
+  margin-bottom:20px;
+">
 
-<p><strong>Risk Level:</strong> ${data.analytics.risk_level}</p>
+  <p>
+    <strong>Days To Close:</strong>
+    ${data.analytics.days_to_close}
+  </p>
 
-<p><strong>Delay Days:</strong> ${data.analytics.delay_days}</p>
+  <p>
+    <strong>Risk Level:</strong>
+
+    <span style="
+      color:
+      ${data.analytics.risk_level === 'High'
+        ? '#c62828'
+        : data.analytics.risk_level === 'Medium'
+        ? '#f57c00'
+        : '#2e7d32'};
+      font-weight:bold;
+    ">
+      ${data.analytics.risk_level}
+    </span>
+  </p>
+
+  <p>
+    <strong>Delay Days:</strong>
+    ${data.analytics.delay_days}
+  </p>
+
+</div>
 
 
       <p><strong>Status:</strong> ${tx.transaction_status}</p>
