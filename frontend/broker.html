@@ -80,7 +80,7 @@
     </div>
     <div style="display:flex; align-items:center; gap:14px;">
       <span class="who" id="whoAmI"></span>
-      <button id="logoutBtn">Log out</button>
+      <button id="demoBtn">Schedule Demo</button>
     </div>
   </div>
 
@@ -142,7 +142,7 @@
     }
 
     async function loadCases() {
-      const res = await fetch('http://localhost:4004/transactions');
+      const res = await fetch('/api/transactions');
       const data = await res.json();
       renderTable(data);
     }
@@ -212,15 +212,14 @@
       });
     }
 
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      await fetch('/api/admin/logout', { method: 'POST' });
-      window.location.href = 'admin-login.html';
+    document.getElementById('demoBtn').addEventListener('click', () => {
+      window.location.href =
+      'mailto:atif@bilqeestech.com?subject=LexClosing%20Brokerage%20Demo';
     });
 
     (async function init() {
-      const staff = await checkSession();
-      if (staff) loadCases();
-    })();
+      await loadCases();
+  })();
   </script>
 </body>
 </html>

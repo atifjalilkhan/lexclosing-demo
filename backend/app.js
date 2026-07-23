@@ -459,6 +459,20 @@ async function handleStep(sessionId, state, text) {
   }
 }
 
+app.get('/api/transactions', async (req, res) => {
+  res.json([
+    {
+      transaction_uuid: '9f65151f-ed4b-4615-8733-decb6c40c107',
+      property_address: '500 Broadway, Kingston, NY 12401',
+      buyer_name: 'Tina Monium',
+      seller_name: 'Lisa Brook',
+      transaction_status: 'MORTGAGE_PROCESSING',
+      current_blocker: 'Mortgage Commitment Outstanding',
+      responsible_party: 'LENDER',
+      next_action: 'Upload Mortgage Commitment Letter'
+    }
+  ]);
+});
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, time: new Date().toISOString() });
 });
