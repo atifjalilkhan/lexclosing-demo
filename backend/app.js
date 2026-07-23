@@ -542,7 +542,29 @@ app.get('/api/transactions/:id', async (req, res) => {
       { role: 'Broker', name: 'ABC Realty' },
       { role: 'Attorney', name: 'Jane Attorney' },
       { role: 'Lender', name: 'Ulster Savings Bank' }
-    ]
+    ],
+activity: [
+  'Contract Received',
+  'Buyer Added',
+  'Seller Added',
+  'Attorney Assigned',
+  'Title Ordered',
+  'Mortgage Processing',
+  'Mortgage Commitment Outstanding'
+],
+documents: [
+  'Purchase Contract',
+  'Title Report',
+  'Mortgage Commitment',
+  'Closing Disclosure',
+  'Deed'
+],
+
+analytics: {
+  days_to_close: 32,
+  risk_level: 'Medium',
+  delay_days: 8
+}
   });
 });
 app.get('/api/health', (req, res) => {

@@ -233,6 +233,29 @@
     <li><strong>${p.role}:</strong> ${p.name}</li>
   `).join('')}
 </ul>
+<h3>Activity Timeline</h3>
+
+<ul>
+  ${data.activity.map(item => `
+    <li>${item}</li>
+  `).join('')}
+</ul>
+
+<h3>Documents</h3>
+
+<ul>
+  ${data.documents.map(doc => `
+    <li>${doc}</li>
+  `).join('')}
+</ul>
+
+<h3>Transaction Analytics</h3>
+
+<p><strong>Days To Close:</strong> ${data.analytics.days_to_close}</p>
+
+<p><strong>Risk Level:</strong> ${data.analytics.risk_level}</p>
+
+<p><strong>Delay Days:</strong> ${data.analytics.delay_days}</p>
 
 
       <p><strong>Status:</strong> ${tx.transaction_status}</p>
