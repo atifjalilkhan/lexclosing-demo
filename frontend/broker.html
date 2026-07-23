@@ -191,28 +191,8 @@
      
       contentEl.querySelectorAll('.stage-select').forEach((select) => {
         select.addEventListener('change', async (e) => {
-          const row = e.target.closest('tr');
-          const caseId = row.dataset.caseId;
-          const newStage = e.target.value;
-          const statusEl = row.querySelector('.save-status');
-
-          try {
-            const res = await fetch(`/api/admin/cases/${caseId}/stage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ stage: newStage }),
-            });
-            if (!res.ok) throw new Error('Update failed');
-            statusEl.style.display = 'inline';
-            setTimeout(() => (statusEl.style.display = 'none'), 1500);
-          } catch (err) {
-            alert('Could not update stage. Please try again.');
-          }
-        });
-      });
-    }
-
-    document.getElementById('demoBtn').addEventListener('click', () => {
+     
+     document.getElementById('demoBtn').addEventListener('click', () => {
       window.location.href =
       'mailto:atif@bilqeestech.com?subject=LexClosing%20Brokerage%20Demo';
     });
