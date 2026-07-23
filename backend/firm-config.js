@@ -15,7 +15,7 @@
 module.exports = {
   firmName: process.env.FIRM_NAME || 'LexClosing',
   firmShortName: process.env.FIRM_SHORT_NAME || 'LC',
-  tagline: process.env.FIRM_TAGLINE || 'Real Estate Transaction Management',
+  tagline: process.env.FIRM_TAGLINE || 'Closing Command Center',
   colors: {
     primary: process.env.BRAND_PRIMARY_COLOR || '#1b3a2e',
     accent: process.env.BRAND_ACCENT_COLOR || '#b8863e',
