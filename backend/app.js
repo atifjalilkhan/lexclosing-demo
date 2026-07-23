@@ -523,50 +523,215 @@ app.get('/api/transactions', async (req, res) => {
   }
 ]);
 });
-app.get('/api/transactions/:id', async (req, res) => {
-  res.json({
-    transaction: {
-      transaction_uuid: '9f65151f-ed4b-4615-8733-decb6c40c107',
-      property_address: '500 Broadway, Kingston, NY 12401',
-      buyer_name: 'Tina Monium',
-      seller_name: 'Lisa Brook',
-      transaction_status: 'MORTGAGE_PROCESSING',
-      current_blocker: 'Mortgage Commitment Outstanding',
-      responsible_party: 'LENDER',
-      next_action: 'Upload Mortgage Commitment Letter'
-    },
-    participants: [
-      { role: 'Buyer', name: 'Tina Monium' },
-      { role: 'Seller', name: 'Lisa Brook' },
-      { role: 'Agent', name: 'John Realtor' },
-      { role: 'Broker', name: 'ABC Realty' },
-      { role: 'Attorney', name: 'Jane Attorney' },
-      { role: 'Lender', name: 'Ulster Savings Bank' }
-    ],
-activity: [
-  'Contract Received',
-  'Buyer Added',
-  'Seller Added',
-  'Attorney Assigned',
-  'Title Ordered',
-  'Mortgage Processing',
-  'Mortgage Commitment Outstanding'
-],
-documents: [
-  'Purchase Contract',
-  'Title Report',
-  'Mortgage Commitment',
-  'Closing Disclosure',
-  'Deed'
-],
 
-analytics: {
-  days_to_close: 32,
-  risk_level: 'Medium',
-  delay_days: 8
-}
-  });
+
+
+app.get('/api/transactions/:id', async (req, res) => {
+
+  const records = {
+    '1': {
+      transaction: {
+        transaction_uuid: '1',
+        property_address: '500 Broadway, Kingston, NY 12401',
+        buyer_name: 'Tina Monium',
+        seller_name: 'Lisa Brook',
+        transaction_status: 'MORTGAGE_PROCESSING',
+        current_blocker: 'Mortgage Commitment Outstanding',
+        responsible_party: 'LENDER',
+        next_action: 'Upload Mortgage Commitment Letter'
+      },
+      participants: [
+        { role: 'Buyer', name: 'Tina Monium' },
+        { role: 'Seller', name: 'Lisa Brook' },
+        { role: 'Agent', name: 'John Realtor' },
+        { role: 'Broker', name: 'ABC Realty' },
+        { role: 'Attorney', name: 'Jane Attorney' },
+        { role: 'Lender', name: 'Ulster Savings Bank' }
+      ],
+      activity: [
+        'Contract Received',
+        'Buyer Added',
+        'Seller Added',
+        'Attorney Assigned',
+        'Title Ordered',
+        'Mortgage Processing'
+      ],
+      documents: [
+        'Purchase Contract',
+        'Title Report',
+        'Mortgage Commitment'
+      ],
+      analytics: {
+        days_to_close: 32,
+        risk_level: 'Medium',
+        delay_days: 8
+      }
+    },
+
+    '2': {
+      transaction: {
+        transaction_uuid: '2',
+        property_address: '85 Main Street, Saugerties, NY 12477',
+        buyer_name: 'John Smith',
+        seller_name: 'Sarah Jones',
+        transaction_status: 'TITLE_REVIEW',
+        current_blocker: 'Title Exception Review',
+        responsible_party: 'ATTORNEY',
+        next_action: 'Review Title Report'
+      },
+      participants: [
+        { role: 'Buyer', name: 'John Smith' },
+        { role: 'Seller', name: 'Sarah Jones' },
+        { role: 'Agent', name: 'Amanda Agent' },
+        { role: 'Broker', name: 'Hudson Realty' },
+        { role: 'Attorney', name: 'Mark Attorney' },
+        { role: 'Lender', name: 'KeyBank' }
+      ],
+      activity: [
+        'Contract Received',
+        'Attorney Assigned',
+        'Title Ordered',
+        'Title Review In Progress'
+      ],
+      documents: [
+        'Purchase Contract',
+        'Title Report'
+      ],
+      analytics: {
+        days_to_close: 21,
+        risk_level: 'Low',
+        delay_days: 2
+      }
+    },
+
+    '3': {
+      transaction: {
+        transaction_uuid: '3',
+        property_address: '23 River Road, Catskill, NY 12414',
+        buyer_name: 'Michael Brown',
+        seller_name: 'David Green',
+        transaction_status: 'CLEAR_TO_CLOSE',
+        current_blocker: '',
+        responsible_party: '',
+        next_action: 'Schedule Closing'
+      },
+      participants: [
+        { role: 'Buyer', name: 'Michael Brown' },
+        { role: 'Seller', name: 'David Green' }
+      ],
+      activity: [
+        'Contract Received',
+        'Title Cleared',
+        'Mortgage Approved',
+        'Clear To Close'
+      ],
+      documents: [
+        'Purchase Contract',
+        'Mortgage Commitment',
+        'Closing Disclosure'
+      ],
+      analytics: {
+        days_to_close: 18,
+        risk_level: 'Low',
+        delay_days: 0
+      }
+    },
+
+    '4': {
+      transaction: {
+        transaction_uuid: '4',
+        property_address: '15 Market Street, Kingston, NY 12401',
+        buyer_name: 'Emily White',
+        seller_name: 'Robert Black',
+        transaction_status: 'CONTRACT_REVIEW',
+        current_blocker: 'Contract Amendment Pending',
+        responsible_party: 'BUYER',
+        next_action: 'Sign Amendment'
+      },
+      participants: [
+        { role: 'Buyer', name: 'Emily White' },
+        { role: 'Seller', name: 'Robert Black' }
+      ],
+      activity: [
+        'Contract Received',
+        'Amendment Requested'
+      ],
+      documents: [
+        'Purchase Contract'
+      ],
+      analytics: {
+        days_to_close: 40,
+        risk_level: 'High',
+        delay_days: 10
+      }
+    },
+
+    '5': {
+      transaction: {
+        transaction_uuid: '5',
+        property_address: '72 Lake View Drive, Woodstock, NY 12498',
+        buyer_name: 'Jessica Hall',
+        seller_name: 'Andrew Clark',
+        transaction_status: 'TITLE_ORDERED',
+        current_blocker: 'Waiting For Title Search',
+        responsible_party: 'TITLE',
+        next_action: 'Upload Title Commitment'
+      },
+      participants: [
+        { role: 'Buyer', name: 'Jessica Hall' },
+        { role: 'Seller', name: 'Andrew Clark' }
+      ],
+      activity: [
+        'Contract Received',
+        'Title Ordered'
+      ],
+      documents: [
+        'Purchase Contract'
+      ],
+      analytics: {
+        days_to_close: 28,
+        risk_level: 'Medium',
+        delay_days: 4
+      }
+    },
+
+    '6': {
+      transaction: {
+        transaction_uuid: '6',
+        property_address: '9 Elm Court, New Paltz, NY 12561',
+        buyer_name: 'Kevin Adams',
+        seller_name: 'Laura Adams',
+        transaction_status: 'CLOSING_SCHEDULED',
+        current_blocker: '',
+        responsible_party: '',
+        next_action: 'Attend Closing'
+      },
+      participants: [
+        { role: 'Buyer', name: 'Kevin Adams' },
+        { role: 'Seller', name: 'Laura Adams' }
+      ],
+      activity: [
+        'Contract Received',
+        'Clear To Close',
+        'Closing Scheduled'
+      ],
+      documents: [
+        'Purchase Contract',
+        'Closing Disclosure'
+      ],
+      analytics: {
+        days_to_close: 25,
+        risk_level: 'Low',
+        delay_days: 0
+      }
+    }
+  };
+
+  res.json(records[req.params.id] || records['1']);
 });
+
+
+
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, time: new Date().toISOString() });
 });
