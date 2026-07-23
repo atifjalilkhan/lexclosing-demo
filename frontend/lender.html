@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LexClosing™ — Closing Command Center | Lender Operations Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .top .who {
+    font-size: 0.85rem;
+    color: var(--cream);
+  }
+  .top button {
+    background: transparent;
+    border: 1px solid var(--brass-light);
+    color: var(--cream);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+  }
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  th, td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--cream-dark);
+    font-size: 0.88rem;
+    vertical-align: top;
+  }
+  th {
+    background: var(--cream-dark);
+    color: var(--pine);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  tr:last-child td { border-bottom: none; }
+  select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--cream-dark);
+    font-family: inherit;
+    font-size: 0.85rem;
+  }
+  .empty, .loading {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 0;
+  }
+  .save-status {
+    font-size: 0.75rem;
+    color: var(--success);
+    margin-left: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="brand-bar top">
+    <div class="firm-name">
+      <span data-firm-name>LexClosing™</span>
+      <small data-firm-tagline>Closing Command Center</small>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="who" id="whoAmI"></span>
+      <button id="demoBtn">Schedule Demo</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1 style="font-size:1.8rem;">Lender Operations Portal</h1>
+    <p style="margin-top:-10px;color:#666;">
+      Real-time visibility into every loan and closing
+    </p>
+  <div style="
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin:20px 0;
+  ">
+  <div class="card">
+    <h3>Open Loans</h3>
+    <div id="openTx" style="font-size:2rem;font-weight:bold;">0</div>
+  </div>
+
+  <div class="card">
+    <h3>Loans Closing This Week</h3>
+    <div id="closingWeek" style="font-size:2rem;font-weight:bold;">0</div>
+  </div>
+
+  <div class="card">
+    <h3>Clear To Fund</h3>
+    <div id="clearToClose" style="font-size:2rem;font-weight:bold;">0</div>
+  </div>
+
+    <div class="card">
+    <h3>Outstanding Conditions</h3>
+    <div id="delayedTx" style="font-size:2rem;font-weight:bold;color:#c62828;">0</div>    
+  </div>
+  </div>
+
+    <div id="content" class="loading">Loading cases…</div>
+    <div id="transactionDetail" style="display:none;margin-top:30px;"></div>
+  </div>
+
+  <script src="brand.js"></script>
+  <script>
+    const contentEl = document.getElementById('content');
+    const whoAmI = document.getElementById('whoAmI');
+    let stagesCache = [];
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str == null ? '' : String(str);
+      return div.innerHTML;
+    }
+
+    async function checkSession() {
+      const res = await fetch('/api/admin/session');
+      const data = await res.json();
+      if (!data.loggedIn) {
+        return null;
+      }
+      whoAmI.textContent = data.staff.name ? `${data.staff.name} (${data.staff.email})` : data.staff.email;
+      return data.staff;
+    }
+
+    async function loadCases() {
+      const res = await fetch('/api/transactions');
+      const data = await res.json();
+
+document.getElementById('openTx').textContent = data.length;
+
+document.getElementById('clearToClose').textContent =
+  data.filter(t => t.transaction_status === 'CLEAR_TO_CLOSE').length;
+
+document.getElementById('closingWeek').textContent =
+  data.filter(t => t.transaction_status === 'CLOSING_SCHEDULED').length;
+
+document.getElementById('delayedTx').textContent =
+  data.filter(t =>
+    t.current_blocker &&
+    t.current_blocker.trim() !== ''
+  ).length;
+
+renderTable(data);
+    }
+
+    function renderTable(transactions) {
+
+  if (!transactions || transactions.length === 0) {
+    contentEl.innerHTML =
+      '<div class="empty">No transactions found.</div>';
+    return;
+  }
+
+  const rows = transactions.map(t => `
+    <tr>
+
+<td>
+  <a href="#"
+      onclick="viewTransaction('${t.transaction_uuid}'); return false;">
+      ${escapeHtml(t.property_address)}
+  </a>
+</td>
+
+      <td>${escapeHtml(t.buyer_name || '')}</td>
+      <td>${escapeHtml(t.seller_name || '')}</td>
+ <td>
+      ${escapeHtml(
+        (t.transaction_status || '')
+        .replaceAll('_', ' ')
+      )}
+ </td>
+      <td style="color:#c62828;font-weight:bold;">
+        ${escapeHtml(t.current_blocker || '')}
+      </td>
+      <td>${escapeHtml(t.responsible_party || '')}</td>
+      <td>${escapeHtml(t.next_action || '')}</td>
+    </tr>
+  `).join('');
+
+  contentEl.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Borrower</th>
+          <th>Seller</th>
+          <th>Status</th>
+          <th>Outstanding Condition</th>
+          <th>Condition Owner</th>
+          <th>Next Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+  `;
+}
+     
+        
+     document.getElementById('demoBtn').addEventListener('click', () => {
+      window.location.href =
+      'mailto:atif@bilqeestech.com?subject=LexClosing%20Brokerage%20Demo';
+    });
+
+  async function viewTransaction(id) {
+
+  const res = await fetch(`/api/transactions/${id}`);
+  const data = await res.json();
+
+  const tx = data.transaction;
+
+  document.getElementById('transactionDetail').style.display = 'block';
+
+  document.getElementById('transactionDetail').innerHTML = `
+    <div class="card">
+      <h2>Transaction Detail</h2>
+
+      <p><strong>Property:</strong> ${tx.property_address}</p>
+
+      <p><strong>Borrower:</strong> ${tx.buyer_name}</p>
+
+      <p><strong>Seller:</strong> ${tx.seller_name}</p>
+<h3>Participants</h3>
+
+<ul>
+  ${data.participants.map(p => `
+    <li><strong>${p.role}:</strong> ${p.name}</li>
+  `).join('')}
+</ul>
+<h3>Activity Timeline</h3>
+
+<ul>
+  ${data.activity.map(item => `
+    <li>${item}</li>
+  `).join('')}
+</ul>
+
+<h3>Documents</h3>
+
+<ul>
+  ${data.documents.map(doc => `
+    <li>${doc}</li>
+  `).join('')}
+</ul>
+
+<h3>Transaction Analytics</h3>
+
+<div style="
+  padding:15px;
+  border-radius:8px;
+  background:#f8f8f8;
+  margin-bottom:20px;
+">
+
+  <p>
+    <strong>Days To Close:</strong>
+    ${data.analytics.days_to_close}
+  </p>
+
+  <p>
+    <strong>Risk Level:</strong>
+
+    <span style="
+      color:
+      ${data.analytics.risk_level === 'High'
+        ? '#c62828'
+        : data.analytics.risk_level === 'Medium'
+        ? '#f57c00'
+        : '#2e7d32'};
+      font-weight:bold;
+    ">
+      ${data.analytics.risk_level}
+    </span>
+  </p>
+
+  <p>
+    <strong>Delay Days:</strong>
+    ${data.analytics.delay_days}
+  </p>
+
+</div>
+
+
+      <p><strong>Status:</strong> ${tx.transaction_status}</p>
+
+      <div style="
+        background:#fff3f3;
+        padding:15px;
+        border-left:5px solid red;
+        margin-top:20px;
+      ">
+        <strong>Current Blocker</strong><br>
+        ${tx.current_blocker}
+      </div>
+
+      <br>
+
+      <strong>Responsible Party:</strong>
+      ${tx.responsible_party}
+
+      <br><br>
+
+      <strong>Next Action:</strong>
+      ${tx.next_action}
+    </div>
+  `;
+}  
+  (async function init() {
+      await loadCases();
+  })();
+  </script>
+</body>
+</html>
