@@ -117,6 +117,7 @@
   </div>
 
     <div id="content" class="loading">Loading cases…</div>
+    <div id="transactionDetail" style="display:none;margin-top:30px;"></div>
   </div>
 
   <script src="brand.js"></script>
@@ -157,10 +158,22 @@
 
   const rows = transactions.map(t => `
     <tr>
-      <td>${escapeHtml(t.property_address)}</td>
+
+<td>
+  <a href="#"
+      onclick="viewTransaction('${t.transaction_uuid}'); return false;">
+      ${escapeHtml(t.property_address)}
+  </a>
+</td>
+
       <td>${escapeHtml(t.buyer_name || '')}</td>
       <td>${escapeHtml(t.seller_name || '')}</td>
-      <td>${escapeHtml(t.transaction_status || '')}</td>
+ <td>
+      ${escapeHtml(
+        (t.transaction_status || '')
+        .replaceAll('_', ' ')
+      )}
+ </td>
       <td style="color:#c62828;font-weight:bold;">
         ${escapeHtml(t.current_blocker || '')}
       </td>
@@ -195,7 +208,50 @@
       'mailto:atif@bilqeestech.com?subject=LexClosing%20Brokerage%20Demo';
     });
 
-    (async function init() {
+  async function viewTransaction(id) {
+
+  const res = await fetch(`/api/transactions/${id}`);
+  const data = await res.json();
+
+  const tx = data.transaction;
+
+  document.getElementById('transactionDetail').style.display = 'block';
+
+  document.getElementById('transactionDetail').innerHTML = `
+    <div class="card">
+      <h2>Transaction Detail</h2>
+
+      <p><strong>Property:</strong> ${tx.property_address}</p>
+
+      <p><strong>Buyer:</strong> ${tx.buyer_name}</p>
+
+      <p><strong>Seller:</strong> ${tx.seller_name}</p>
+
+      <p><strong>Status:</strong> ${tx.transaction_status}</p>
+
+      <div style="
+        background:#fff3f3;
+        padding:15px;
+        border-left:5px solid red;
+        margin-top:20px;
+      ">
+        <strong>Current Blocker</strong><br>
+        ${tx.current_blocker}
+      </div>
+
+      <br>
+
+      <strong>Responsible Party:</strong>
+      ${tx.responsible_party}
+
+      <br><br>
+
+      <strong>Next Action:</strong>
+      ${tx.next_action}
+    </div>
+  `;
+}  
+  (async function init() {
       await loadCases();
   })();
   </script>
