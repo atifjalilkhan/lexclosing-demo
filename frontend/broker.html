@@ -142,56 +142,53 @@
     }
 
     async function loadCases() {
-      const res = await fetch('/api/admin/cases');
-      if (res.status === 401) {
-        return;
-      }
+      const res = await fetch('http://localhost:4004/transactions');
       const data = await res.json();
-      stagesCache = data.stages;
-      renderTable(data.cases);
+      renderTable(data);
     }
 
-    function renderTable(cases) {
-      if (!cases || cases.length === 0) {
-        contentEl.innerHTML = '<div class="empty">No cases yet.</div>';
-        return;
-      }
+    function renderTable(transactions) {
 
-      const rows = cases.map((c) => `
-        <tr data-case-id="${c.id}">
-          <td class="mono">${escapeHtml(c.caseNumber)}</td>
-          <td>
-            <div style="font-weight:600;">${escapeHtml(c.client.firstName)} ${escapeHtml(c.client.lastName)}</div>
-            <div style="color:var(--muted); font-size:0.8rem;">${escapeHtml(c.client.phone)} · ${escapeHtml(c.client.email)}</div>
-          </td>
-          <td>${escapeHtml(c.transactionType)}<br/><span style="color:var(--muted); font-size:0.8rem;">${escapeHtml(c.propertyAddress)}</span></td>
-          <td style="max-width:320px;">${escapeHtml(c.description)}</td>
-          <td>
-            <select class="stage-select">
-              ${stagesCache.map((s) => `<option value="${escapeHtml(s)}" ${s === c.stage ? 'selected' : ''}>${escapeHtml(s)}</option>`).join('')}
-            </select>
-            <span class="save-status" style="display:none;">Saved ✓</span>
-          </td>
-          <td style="color:var(--muted); font-size:0.78rem;">${new Date(c.updatedAt).toLocaleString()}</td>
+  if (!transactions || transactions.length === 0) {
+    contentEl.innerHTML =
+      '<div class="empty">No transactions found.</div>';
+    return;
+  }
+
+  const rows = transactions.map(t => `
+    <tr>
+      <td>${escapeHtml(t.property_address)}</td>
+      <td>${escapeHtml(t.buyer_name || '')}</td>
+      <td>${escapeHtml(t.seller_name || '')}</td>
+      <td>${escapeHtml(t.transaction_status || '')}</td>
+      <td style="color:#c62828;font-weight:bold;">
+        ${escapeHtml(t.current_blocker || '')}
+      </td>
+      <td>${escapeHtml(t.responsible_party || '')}</td>
+      <td>${escapeHtml(t.next_action || '')}</td>
+    </tr>
+  `).join('');
+
+  contentEl.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Buyer</th>
+          <th>Seller</th>
+          <th>Status</th>
+          <th>Current Blocker</th>
+          <th>Responsible Party</th>
+          <th>Next Action</th>
         </tr>
-      `).join('');
-
-      contentEl.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Transaction #</th>
-              <th>Client</th>
-              <th>Transaction Type</th>
-              <th>Transaction Details</th>
-              <th>Status</th>
-              <th>Updated</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      `;
-
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+  `;
+}
+     
       contentEl.querySelectorAll('.stage-select').forEach((select) => {
         select.addEventListener('change', async (e) => {
           const row = e.target.closest('tr');
