@@ -135,7 +135,6 @@
       const res = await fetch('/api/admin/session');
       const data = await res.json();
       if (!data.loggedIn) {
-        window.location.href = 'admin-login.html';
         return null;
       }
       whoAmI.textContent = data.staff.name ? `${data.staff.name} (${data.staff.email})` : data.staff.email;
@@ -145,7 +144,6 @@
     async function loadCases() {
       const res = await fetch('/api/admin/cases');
       if (res.status === 401) {
-        window.location.href = 'admin-login.html';
         return;
       }
       const data = await res.json();
