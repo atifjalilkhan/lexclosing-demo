@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LexClosing™ — Closing Command Center | Brokerage Operations Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .top .who {
+    font-size: 0.85rem;
+    color: var(--cream);
+  }
+  .top button {
+    background: transparent;
+    border: 1px solid var(--brass-light);
+    color: var(--cream);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+  }
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  th, td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--cream-dark);
+    font-size: 0.88rem;
+    vertical-align: top;
+  }
+  th {
+    background: var(--cream-dark);
+    color: var(--pine);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  tr:last-child td { border-bottom: none; }
+  select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--cream-dark);
+    font-family: inherit;
+    font-size: 0.85rem;
+  }
+  .empty, .loading {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 0;
+  }
+  .save-status {
+    font-size: 0.75rem;
+    color: var(--success);
+    margin-left: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="brand-bar top">
+    <div class="firm-name">
+      <span data-firm-name>LexClosing™</span>
+      <small data-firm-tagline>Closing Command Center</small>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="who" id="whoAmI"></span>
+      <button id="logoutBtn">Log out</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1 style="font-size:1.8rem;">Brokerage Operations Portal</h1>
+    <p style="margin-top:-10px;color:#666;">
+      Real-time visibility into every closing transaction
+    </p>
+  <div style="
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin:20px 0;
+  ">
+  <div class="card">
+    <h3>Open Transactions</h3>
+    <div style="font-size:2rem;font-weight:bold;">47</div>
+  </div>
+
+  <div class="card">
+    <h3>Closing This Week</h3>
+    <div style="font-size:2rem;font-weight:bold;">12</div>
+  </div>
+
+  <div class="card">
+    <h3>Clear To Close</h3>
+    <div style="font-size:2rem;font-weight:bold;">8</div>
+  </div>
+
+    <div class="card">
+    <h3>Delayed</h3>
+    <div style="font-size:2rem;font-weight:bold;color:#c62828;">3</div>
+    </div>
+  </div>
+
+    <div id="content" class="loading">Loading cases…</div>
+  </div>
+
+  <script src="brand.js"></script>
+  <script>
+    const contentEl = document.getElementById('content');
+    const whoAmI = document.getElementById('whoAmI');
+    let stagesCache = [];
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str == null ? '' : String(str);
+      return div.innerHTML;
+    }
+
+    async function checkSession() {
+      const res = await fetch('/api/admin/session');
+      const data = await res.json();
+      if (!data.loggedIn) {
+        window.location.href = 'admin-login.html';
+        return null;
+      }
+      whoAmI.textContent = data.staff.name ? `${data.staff.name} (${data.staff.email})` : data.staff.email;
+      return data.staff;
+    }
+
+    async function loadCases() {
+      const res = await fetch('/api/admin/cases');
+      if (res.status === 401) {
+        window.location.href = 'admin-login.html';
+        return;
+      }
+      const data = await res.json();
+      stagesCache = data.stages;
+      renderTable(data.cases);
+    }
+
+    function renderTable(cases) {
+      if (!cases || cases.length === 0) {
+        contentEl.innerHTML = '<div class="empty">No cases yet.</div>';
+        return;
+      }
+
+      const rows = cases.map((c) => `
+        <tr data-case-id="${c.id}">
+          <td class="mono">${escapeHtml(c.caseNumber)}</td>
+          <td>
+            <div style="font-weight:600;">${escapeHtml(c.client.firstName)} ${escapeHtml(c.client.lastName)}</div>
+            <div style="color:var(--muted); font-size:0.8rem;">${escapeHtml(c.client.phone)} · ${escapeHtml(c.client.email)}</div>
+          </td>
+          <td>${escapeHtml(c.transactionType)}<br/><span style="color:var(--muted); font-size:0.8rem;">${escapeHtml(c.propertyAddress)}</span></td>
+          <td style="max-width:320px;">${escapeHtml(c.description)}</td>
+          <td>
+            <select class="stage-select">
+              ${stagesCache.map((s) => `<option value="${escapeHtml(s)}" ${s === c.stage ? 'selected' : ''}>${escapeHtml(s)}</option>`).join('')}
+            </select>
+            <span class="save-status" style="display:none;">Saved ✓</span>
+          </td>
+          <td style="color:var(--muted); font-size:0.78rem;">${new Date(c.updatedAt).toLocaleString()}</td>
+        </tr>
+      `).join('');
+
+      contentEl.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Transaction #</th>
+              <th>Client</th>
+              <th>Transaction Type</th>
+              <th>Transaction Details</th>
+              <th>Status</th>
+              <th>Updated</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+
+      contentEl.querySelectorAll('.stage-select').forEach((select) => {
+        select.addEventListener('change', async (e) => {
+          const row = e.target.closest('tr');
+          const caseId = row.dataset.caseId;
+          const newStage = e.target.value;
+          const statusEl = row.querySelector('.save-status');
+
+          try {
+            const res = await fetch(`/api/admin/cases/${caseId}/stage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ stage: newStage }),
+            });
+            if (!res.ok) throw new Error('Update failed');
+            statusEl.style.display = 'inline';
+            setTimeout(() => (statusEl.style.display = 'none'), 1500);
+          } catch (err) {
+            alert('Could not update stage. Please try again.');
+          }
+        });
+      });
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await fetch('/api/admin/logout', { method: 'POST' });
+      window.location.href = 'admin-login.html';
+    });
+
+    (async function init() {
+      const staff = await checkSession();
+      if (staff) loadCases();
+    })();
+  </script>
+</body>
+</html>
